@@ -616,3 +616,81 @@
 
 /* Optional: ensure nothing old overrides us */
 #code .code-row *{ box-sizing: border-box; }
+
+/* Sound toggle */
+#soundToggle{
+  border:none;background:transparent;padding:10px;border-radius:12px;cursor:pointer;color:var(--muted);
+  transition: transform .2s ease, color .2s ease, box-shadow .2s ease;
+}
+#soundToggle.on{ color: var(--text); }
+#soundToggle:hover{ transform: translateY(-2px); box-shadow: 0 8px 26px rgba(138,123,255,.18); }
+
+#preloader{
+  position: fixed; inset: 0; z-index: 1000;
+  display: grid; place-items: center;
+  background:
+    radial-gradient(60% 40% at 70% 0%, color-mix(in oklab, var(--violet) 12%, transparent) 0%, transparent 60%),
+    radial-gradient(50% 35% at 10% 20%, color-mix(in oklab, var(--violet-2) 10%, transparent) 0%, transparent 70%),
+    color-mix(in oklab, var(--bg) 88%, transparent);
+  backdrop-filter: blur(12px) saturate(140%);
+  transition: opacity .6s ease, visibility .6s ease;
+}
+#preloader.hide{
+  opacity: 0; visibility: hidden; pointer-events: none;
+}
+
+#preloader .pre-wrap{
+  width: min(880px, 92vw);
+  background: color-mix(in oklab, var(--bg) 72%, transparent);
+  border: 1px solid color-mix(in oklab, var(--violet) 24%, var(--line));
+  border-radius: 20px;
+  box-shadow: 0 30px 100px rgba(10,14,25,.26), inset 0 0 0 1px rgba(255,255,255,.03);
+  padding: clamp(22px, 4vw, 36px);
+  text-align: center;
+}
+
+#preloader .pre-logo{
+  display:flex; gap:10px; align-items:center; justify-content:center;
+  font-weight:800; margin-bottom: 10px;
+}
+#preloader .pre-title{
+  margin: 0; letter-spacing: -0.02em; line-height: 1.06;
+  font-weight: 800; font-size: clamp(28px, 5.6vw, 48px);
+  background: linear-gradient(180deg, var(--text), color-mix(in oklab, var(--text) 86%, var(--violet-2)));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  text-shadow: 0 2px 22px rgba(138,123,255,.14);
+}
+#preloader .pre-sub{
+  margin: 6px 0 12px; color: var(--muted);
+  font-size: clamp(16px, 2.2vw, 18px);
+}
+#preloader .pre-future{
+  margin: 8px auto 16px; color: color-mix(in oklab, var(--muted) 88%, var(--text) 12%);
+  max-width: 70ch; line-height: 1.7;
+}
+#preloader .pre-tip strong{
+  background: linear-gradient(180deg, var(--violet), var(--violet-2));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+#preloader .pre-cta{ display:flex; gap:12px; justify-content:center; margin: 10px 0 8px; }
+
+#preloader .pre-progress{
+  height: 4px; width: 100%; background: var(--line);
+  border-radius: 999px; overflow: hidden; margin-top: 18px;
+}
+#preloader .pre-bar{
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--violet), var(--violet-2));
+  box-shadow: 0 0 24px rgba(138,123,255,.35);
+  animation: prefill 2.2s ease forwards;
+}
+@keyframes prefill{
+  from{ width: 10%; }
+  to  { width: 94%; }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce){
+  #preloader{ transition: none; }
+  #preloader .pre-bar{ animation: none; width: 90%; }
+}
