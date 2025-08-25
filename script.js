@@ -27,3 +27,4 @@
 
   document.querySelectorAll('.panel .panel-media').forEach(m => observer.observe(m));
 })();
+
