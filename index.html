@@ -1,5 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
+  <!-- PRELOADER -->
+<div id="preloader" role="dialog" aria-modal="true" aria-live="polite">
+  <div class="pre-wrap">
+    <div class="pre-logo">
+      <span class="logo-dot" aria-hidden="true"></span>
+      <span>GPT-10</span>
+    </div>
+
+    <h1 class="pre-title">Welcome to the GPT-10 presentation</h1>
+    <p class="pre-sub">Enjoy the experience.</p>
+
+    <div class="pre-future">
+      <p>We’re showcasing the future: creation across media, code that ships, and applied intelligence.</p>
+      <p class="pre-tip">For richer immersion, turn on the <strong>sound</strong> using the button in the <strong>top-right</strong>.</p>
+    </div>
+
+    <div class="pre-cta">
+      <button id="preEnter" class="btn primary">Enter</button>
+      <button id="preSkip" class="btn ghost" aria-label="Skip intro">Skip</button>
+    </div>
+
+    <div class="pre-progress" aria-hidden="true">
+      <div class="pre-bar"></div>
+    </div>
+  </div>
+</div>
+<!-- /PRELOADER -->
+
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -171,6 +199,8 @@
       <a href="#chatui">Chat UI</a>
       <a href="#contact">Experience</a>
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">☾</button>
+      <!-- Header nav: place next to the theme toggle -->
+      <button class="theme-toggle" id="soundToggle" aria-label="Toggle sound">🔈</button>
     </nav>
   </div>
 </header>
@@ -207,15 +237,6 @@
 <p class="about-lead glow">
   A universal creator, a trusted advisor, and an execution engine. GPT-10 understands the world across text, images, video, audio, and 3D — and acts on it with precision and taste.
 </p>
-
-
-    <div class="about-pills">
-      <span class="pill">Multimodal</span>
-      <span class="pill">Advanced Reasoning</span>
-      <span class="pill">Long-term Memory</span>
-      <span class="pill">Autonomous Agents</span>
-      <span class="pill">Trust & Safety</span>
-    </div>
 
     <div class="features">
       <div class="feature">
@@ -688,6 +709,13 @@
   <div>© <span id="year"></span> All rights reserved.</div>
 </footer>
 
+<!-- Ambient and SFX audio elements (put these first) -->
+<audio id="ambientAudio" preload="none" loop></audio>
+<audio id="sfxHover" preload="auto"></audio>
+<audio id="sfxClick" preload="auto"></audio>
+<audio id="sfxSuccess" preload="auto"></audio>
+
+<!-- Now the audio controller script -->
 <script>
   // Year
   document.getElementById('year').textContent = new Date().getFullYear();
@@ -813,7 +841,120 @@
       media.style.transform = `translateY(${mid * -0.05}px)`;
     }, {passive:true});
   })();
+ 
+// ===== GPT-10 Audio Controller (robust) =====
+(function(){
+  const $ = (id) => document.getElementById(id);
+  const toggle = $("soundToggle");
+  const amb = $("ambientAudio");
+  const hov = $("sfxHover");
+  const clk = $("sfxClick");
+  const ok  = $("sfxSuccess");
+
+  if(!toggle){ console.warn("[sound] #soundToggle not found"); return; }
+  if(!amb||!hov||!clk||!ok){ console.warn("[sound] audio tags missing"); return; }
+
+  // Source files (handles AMBIANT/AMBIENT spellings)
+  const ambientCandidates = ["AMBIANT.mp3","AMBIENT.mp3","ambient.mp3"];
+  const existingAmbient = ambientCandidates[0]; // set one; network will tell if 404
+  amb.src = existingAmbient;
+  hov.src = "HOVER.mp3";
+  clk.src = "CLICK.mp3";
+  ok.src  = "SUCCESS.mp3";
+
+  // Volume (a bit higher at first so you can hear it; change later)
+  const KEY="gpt10-sound", VOL="gpt10-volume";
+  const start = localStorage.getItem(KEY) || "off";
+  const vol = Math.min(Math.max(parseFloat(localStorage.getItem(VOL) || "0.30"),0),1);
+  amb.volume = vol; hov.volume = Math.min(vol*0.7,0.35); clk.volume = Math.min(vol,0.4); ok.volume = Math.min(vol,0.4);
+
+  function render(state){ toggle.classList.toggle("on", state==="on"); toggle.textContent = state==="on" ? "🔊" : "🔈"; }
+  render(start);
+
+  // Autoplay policy: only after first gesture
+  let armed=false;
+  function arm(){
+    if(armed) return; armed=true;
+    console.log("[sound] armed. pref=", localStorage.getItem(KEY));
+    if(localStorage.getItem(KEY)==="on"){ amb.play().then(()=>console.log("[sound] ambient playing")).catch(e=>console.warn("[sound] play blocked:", e.message)); }
+    window.removeEventListener("pointerdown", arm);
+    window.removeEventListener("keydown", arm);
+  }
+  window.addEventListener("pointerdown", arm);
+  window.addEventListener("keydown", arm);
+
+  // Toggle
+  toggle.addEventListener("click", ()=>{
+    const next = (localStorage.getItem(KEY)||"off")==="on" ? "off" : "on";
+    localStorage.setItem(KEY, next); render(next);
+    if(next==="on"){
+      amb.play().then(()=>console.log("[sound] ambient playing")).catch(e=>console.warn("[sound] play blocked:", e.message));
+    } else { amb.pause(); amb.currentTime=0; console.log("[sound] ambient paused"); }
+  });
+
+  // UI SFX
+  document.body.addEventListener("mouseenter", (e)=>{
+    if(localStorage.getItem(KEY)!=="on") return;
+    if(e.target.closest("a,button,.btn")){ try{ hov.currentTime=0; hov.play(); }catch{} }
+  }, true);
+  document.body.addEventListener("click", (e)=>{
+    if(localStorage.getItem(KEY)!=="on") return;
+    if(e.target.closest("a,button,.btn,.theme-toggle,#soundToggle")){ try{ clk.currentTime=0; clk.play(); }catch{} }
+  }, true);
+
+  // Helper to test success sound from console
+  window.gpt10Success = ()=>{ if(localStorage.getItem(KEY)==="on"){ try{ ok.currentTime=0; ok.play(); }catch{} } };
+
+  // Log load status to help debug
+  amb.addEventListener("error", ()=>console.warn("[sound] ambient 404 or decode error for", amb.src));
+  amb.addEventListener("canplaythrough", ()=>console.log("[sound] ambient ready:", amb.src));
+})();
+
+
+// ===== PRELOADER controller =====
+(function(){
+  const pre = document.getElementById('preloader');
+  if(!pre) return;
+
+  const enterBtn = document.getElementById('preEnter');
+  const skipBtn  = document.getElementById('preSkip');
+  const KEY = 'gpt10-preloader-shown';
+
+  // Show only once per session
+  const already = sessionStorage.getItem(KEY) === '1';
+  if(already){
+    pre.classList.add('hide');
+    return;
+  }
+
+  let canDismiss = false; // block dismissal before 5s
+  const dismiss = () => {
+    if(!canDismiss) return; // ignore until time passed or enter pressed
+    pre.classList.add('hide');
+    sessionStorage.setItem(KEY, '1');
+  };
+
+  // Buttons
+  enterBtn?.addEventListener('click', ()=>{
+    canDismiss = true; // allow dismiss instantly
+    dismiss();
+  });
+  skipBtn?.addEventListener('click', ()=>{
+    canDismiss = true;
+    dismiss();
+  });
+
+  // Minimum duration: 5s
+  setTimeout(()=>{ canDismiss = true; }, 8000);
+
+  // Auto-dismiss if user hasn't clicked anything, but only after 5s + load
+  window.addEventListener('load', ()=>{
+    setTimeout(()=> dismiss(), 5200); 
+  });
+
+})();
+
 </script>
+
 </body>
 </html>
-
