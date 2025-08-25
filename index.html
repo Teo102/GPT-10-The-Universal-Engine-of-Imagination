@@ -15,7 +15,7 @@
     --accent:#4c73ff; --accent-2:#9aa7ff; --card:#ffffff; --radius:16px;
     --shadow:0 12px 40px rgba(10,14,25,.10);
     --glass:color-mix(in oklab, var(--bg) 85%, transparent);
-    --overlay: linear-gradient(180deg, rgba(5,8,15,.0) 0%, rgba(5,8,15,.35) 55%, rgba(5,8,15,.55) 100%);
+    --overlay: linear-gradient(180deg, rgba(5,8,15,.0) 0%, rgba(5,8,15,.35) 55%, rgba(5,8,15,.6) 100%);
   }
   @media (prefers-color-scheme: dark){
     :root{
@@ -23,7 +23,7 @@
       --accent:#7996ff; --accent-2:#b8c3ff; --card:#0f131b;
       --shadow:0 12px 40px rgba(0,0,0,.45);
       --glass:color-mix(in oklab, var(--bg) 76%, transparent);
-      --overlay: linear-gradient(180deg, rgba(0,0,0,.0) 0%, rgba(0,0,0,.35) 55%, rgba(0,0,0,.6) 100%);
+      --overlay: linear-gradient(180deg, rgba(0,0,0,.0) 0%, rgba(0,0,0,.35) 55%, rgba(0,0,0,.65) 100%);
     }
   }
 
@@ -47,6 +47,7 @@
   p{margin:0 0 10px;color:var(--muted);font-size:clamp(16px,1.7vw,18px);line-height:1.65}
   .lead{font-size:clamp(18px,2vw,20px);color:var(--muted)}
   .muted{color:var(--muted)}
+  .tag{display:inline-block;border:1px solid var(--line);padding:6px 10px;border-radius:999px;font-size:12px;color:var(--muted)}
 
   .btn{display:inline-flex;align-items:center;gap:10px;padding:14px 18px;border-radius:999px;
     border:1px solid var(--line);background:var(--bg);font-weight:600;
@@ -54,7 +55,6 @@
   .btn:hover{transform:translateY(-2px);border-color:var(--accent);box-shadow:0 10px 30px rgba(76,115,255,.20)}
   .btn.primary{background:linear-gradient(180deg,var(--accent),var(--accent-2));border:none;color:#fff}
   .btn.ghost{background:transparent}
-  .tag{display:inline-block;border:1px solid var(--line);padding:6px 10px;border-radius:999px;font-size:12px;color:var(--muted)}
 
   .grid{display:grid;gap:24px}
   .grid.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -69,7 +69,7 @@
   .card:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(10,14,25,.16);border-color:color-mix(in oklab, var(--accent) 40%, var(--line))}
   .divider{height:1px;background:var(--line);margin:40px 0}
 
-  /* ===== HEADER + SCROLL BAR ===== */
+  /* ===== HEADER + PROGRESS ===== */
   .header{position:sticky;top:0;z-index:60;background:var(--glass);backdrop-filter:saturate(160%) blur(14px);border-bottom:1px solid var(--line)}
   .nav{display:flex;align-items:center;justify-content:space-between;height:70px}
   .logo{display:flex;align-items:center;gap:10px;font-weight:800}
@@ -80,8 +80,8 @@
   .theme-toggle{border:none;background:transparent;padding:10px;border-radius:12px;cursor:pointer;color:var(--muted)}
   .scrollbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent-2));width:0%;z-index:70}
 
-  /* ===== HERO (video-ready) ===== */
-  .hero{position:relative;min-height:82vh;display:flex;align-items:center;isolation:isolate}
+  /* ===== HERO ===== */
+  .hero{position:relative;min-height:100vh;display:flex;align-items:center;isolation:isolate}
   .hero .grid{align-items:center}
   .hero-glow{position:absolute;inset:-10% -10% auto -10%;height:60%;
     background:radial-gradient(45% 60% at 60% 40%, color-mix(in oklab, var(--accent) 45%, transparent), transparent 60%);
@@ -89,16 +89,15 @@
   .hero-media{position:relative;border-radius:20px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow)}
   .hero-media video,.hero-media img{width:100%;height:100%;display:block;object-fit:cover}
 
-  /* ===== FULL-BLEED PANELS (big images) ===== */
+  /* ===== FULL-BLEED PANELS (fullscreen minus navbar) ===== */
   .fullbleed{width:100vw;margin-left:calc(50% - 50vw)}
   .panel{
-    position:relative;min-height:66vh;display:grid;place-items:stretch;overflow:hidden;
+    position:relative;min-height:calc(100vh - 70px); /* only navbar remains visible */
+    display:grid;place-items:stretch;overflow:hidden;
     border-top:1px solid var(--line);border-bottom:1px solid var(--line);
   }
-  .panel .panel-media{
-    position:absolute;inset:0;overflow:hidden;
-  }
-  .panel .panel-media img{width:100%;height:100%;object-fit:cover;filter:saturate(.98) contrast(1.02)}
+  .panel .panel-media{position:absolute;inset:0;overflow:hidden}
+  .panel .panel-media img,.panel .panel-media video{width:100%;height:100%;object-fit:cover;filter:saturate(.98) contrast(1.02)}
   .panel .panel-media .glow{position:absolute;inset:0;background:radial-gradient(60% 50% at 50% 40%, rgba(76,115,255,.18), transparent 60%);mix-blend-mode:screen;pointer-events:none}
   .panel .overlay{position:absolute;inset:0;background:var(--overlay)}
   .panel .content{
@@ -110,14 +109,17 @@
     background: color-mix(in oklab, var(--bg) 65%, transparent);
     border:1px solid var(--line); border-radius:20px; padding:22px 24px; max-width:640px;
     box-shadow:0 20px 60px rgba(0,0,0,.22);
+    transition:transform .35s ease, box-shadow .35s ease;
   }
+  .panel .bubble:hover{transform:translateY(-6px);box-shadow:0 30px 80px rgba(0,0,0,.28)}
   .panel.right .content{justify-content:flex-end}
   .panel-title{margin:0 0 6px; font-weight:750; font-size:clamp(26px,3.8vw,40px)}
   .panel-sub{margin:0;color:var(--muted)}
 
-  /* ===== LIGHTBOX ===== */
-  .lightbox{position:fixed;inset:0;background:rgba(5,7,12,.82);display:none;align-items:center;justify-content:center;z-index:80}
-  .lightbox img{max-width:92vw;max-height:88vh;border-radius:16px;box-shadow:0 40px 120px rgba(0,0,0,.6)}
+  /* ===== BREAK SECTIONS ===== */
+  .break{height:calc(100vh - 70px);display:grid;place-items:center;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .break .break-title{font-weight:800;font-size:clamp(32px,7vw,88px);letter-spacing:-0.02em;text-align:center;line-height:1.06}
+  .break .break-sub{margin-top:10px;text-align:center}
 
   /* ===== DEVICE MOCKS ===== */
   .macbook{
@@ -132,17 +134,21 @@
   }
   .iphone .screen{border-radius:22px;overflow:hidden;border:1px solid var(--line);aspect-ratio:9/19.5;background:var(--bg-soft)}
 
-  /* ===== REVEAL / PARALLAX / TILT ===== */
+  /* ===== LIGHTBOX ===== */
+  .lightbox{position:fixed;inset:0;background:rgba(5,7,12,.82);display:none;align-items:center;justify-content:center;z-index:80}
+  .lightbox img{max-width:92vw;max-height:88vh;border-radius:16px;box-shadow:0 40px 120px rgba(0,0,0,.6)}
+
+  /* ===== REVEAL / PARALLAX ===== */
   .reveal{opacity:0;transform:translateY(12px);transition:opacity .8s ease, transform .8s ease}
   .reveal.is-visible{opacity:1;transform:none}
-  .tilt{transform-style:preserve-3d;perspective:1000px;transition:transform .25s ease}
-  .tilt:hover{transform:translateY(-6px)}
   .parallax{will-change:transform}
 
   /* Accessibility */
   @media (prefers-reduced-motion: reduce){
     *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
   }
+  /* Quick debug: ensure panel images are visible */
+  .panel .panel-media img { opacity: 1 !important; visibility: visible !important; }
 </style>
 </head>
 <body>
@@ -167,8 +173,8 @@
 </header>
 
 <main id="main">
-  <!-- HERO -->
-  <section class="hero section container" id="home">
+  <!-- HERO (100vh) -->
+  <section class="hero section container" id="home" style="min-height:100vh">
     <div class="hero-glow" aria-hidden="true"></div>
     <div class="grid cols-2">
       <div class="reveal">
@@ -182,13 +188,10 @@
         </div>
       </div>
 
-      <!-- HERO media (video first if present) -->
-      <div class="hero-media reveal parallax tilt">
-        <!-- Optional hero video (muted loop). Place file: assets/images/hero-orb.mp4 -->
-        <video id="heroVideo" autoplay muted loop playsinline poster="assets/images/hero-orb.png">
-          <source src="assets/images/hero-orb.mp4" type="video/mp4" />
-        </video>
-        <noscript><img src="hero-orb.png" alt="GPT-10 premium orb"></noscript>
+      <!-- HERO media (video with poster; fallback to image) -->
+      <div class="hero-media reveal parallax">
+        <!-- Place optional hero video: hero-orb.mp4; poster must be hero-orb.png -->
+        <img src="hero-orb.png" alt="GPT-10 premium orb" style="width:100%;height:100%;object-fit:cover" class="lightboxable">
       </div>
     </div>
   </section>
@@ -204,10 +207,10 @@
           <span class="tag">Multimodal</span><span class="tag">Reasoning</span><span class="tag">Memory</span><span class="tag">Agents</span><span class="tag">Trust</span>
         </div>
       </div>
-      <div class="reveal tilt">
-        <!-- about-concept -->
+      <div class="reveal">
         <div class="macbook">
           <div class="screen">
+            <!-- about image -->
             <img src="about-concept.png" alt="Conceptual visualization of GPT-10" style="width:100%;height:100%;object-fit:cover" class="lightboxable">
           </div>
         </div>
@@ -215,13 +218,27 @@
     </div>
   </section>
 
-  <!-- FULL-BLEED PANELS: CREATE -->
+  <!-- BREAK 1 -->
+  <section class="break fullbleed">
+    <div>
+      <div class="break-title reveal">From imagination to execution.</div>
+      <p class="break-sub muted reveal">Create. Ship. Scale.</p>
+    </div>
+  </section>
+
+  <!-- CREATE PANELS (each is full viewport minus navbar) -->
   <section class="fullbleed panel" id="create" data-parallax="0.12">
     <div class="panel-media">
-      <img src="create-images.png" alt="Ultra-detailed image generation" class="lightboxable">
-      <div class="glow" aria-hidden="true"></div>
-      <div class="overlay" aria-hidden="true"></div>
-    </div>
+  <video
+    src="create-images.mp4"
+    poster="create-images.png"
+    autoplay
+    muted
+    loop
+    playsinline
+  ></video>
+  <div class="overlay" aria-hidden="true"></div>
+</div>
     <div class="content">
       <div class="bubble">
         <h3 class="panel-title">Create images with taste</h3>
@@ -230,11 +247,19 @@
     </div>
   </section>
 
-  <section class="fullbleed panel right" data-parallax="0.1">
-    <div class="panel-media">
-      <img src="create-video.png" alt="Cinematic video generation interface" class="lightboxable">
-      <div class="overlay" aria-hidden="true"></div>
-    </div>
+  <section class="fullbleed panel right" data-parallax="0.10">
+ <div class="panel-media">
+  <video
+    src="create-video.mp4"
+    poster="create-video.png"
+    autoplay
+    muted
+    loop
+    playsinline
+  ></video>
+  <div class="overlay" aria-hidden="true"></div>
+</div>
+
     <div class="content">
       <div class="bubble">
         <h3 class="panel-title">Generate 15-minute films</h3>
@@ -243,11 +268,19 @@
     </div>
   </section>
 
-  <section class="fullbleed panel" data-parallax="0.08">
-    <div class="panel-media">
-      <img src="create-music.png" alt="Futuristic recording studio with holographic soundwaves" class="lightboxable">
-      <div class="overlay" aria-hidden="true"></div>
-    </div>
+  <section class="fullbleed panel" data-parallax="0.09">
+<div class="panel-media">
+  <video
+    src="create-music.mp4"
+    poster="create-music.png"
+    autoplay
+    muted
+    loop
+    playsinline
+  ></video>
+  <div class="overlay" aria-hidden="true"></div>
+</div>
+
     <div class="content">
       <div class="bubble">
         <h3 class="panel-title">Compose original music</h3>
@@ -256,11 +289,19 @@
     </div>
   </section>
 
-  <section class="fullbleed panel right" data-parallax="0.08">
-    <div class="panel-media">
-      <img src="create-3d.png" alt="Futuristic 3D object printing" class="lightboxable">
-      <div class="overlay" aria-hidden="true"></div>
-    </div>
+  <section class="fullbleed panel right" data-parallax="0.09">
+   <div class="panel-media">
+  <video
+    src="create-3d.mp4"
+    poster="create-3d.png"
+    autoplay
+    muted
+    loop
+    playsinline
+  ></video>
+  <div class="overlay" aria-hidden="true"></div>
+</div>
+
     <div class="content">
       <div class="bubble">
         <h3 class="panel-title">Design in 3D & print</h3>
@@ -269,14 +310,22 @@
     </div>
   </section>
 
-  <!-- CODE (device mocks) -->
+  <!-- BREAK 2 -->
+  <section class="break fullbleed">
+    <div>
+      <div class="break-title reveal">Code that ships itself.</div>
+      <p class="break-sub muted reveal">Games, web, and automation — production-grade.</p>
+    </div>
+  </section>
+
+  <!-- CODE -->
   <section class="section" id="code">
     <div class="container">
       <h2 class="reveal">Code. Ship. Scale.</h2>
       <p class="lead reveal">Mobile games, world-class websites, and automations that execute your vision at scale.</p>
       <div class="grid cols-3" style="margin-top:18px">
         <article class="reveal">
-          <div class="iphone tilt">
+          <div class="iphone">
             <div class="screen">
               <img src="code-games.png" alt="Holographic creation of a mobile game" style="width:100%;height:100%;object-fit:cover" class="lightboxable">
             </div>
@@ -287,7 +336,7 @@
         </article>
 
         <article class="reveal">
-          <div class="macbook tilt">
+          <div class="macbook">
             <div class="screen">
               <img src="code-web.png" alt="Premium holographic UI showing websites generating" style="width:100%;height:100%;object-fit:cover" class="lightboxable">
             </div>
@@ -297,7 +346,7 @@
           <p class="muted">Responsive, accessible, blazing fast — SSR, analytics, SEO, A/B testing baked in.</p>
         </article>
 
-        <article class="reveal tilt">
+        <article class="reveal">
           <div class="card">
             <div class="icon" aria-hidden="true">⚙️</div>
             <h3>Automation</h3>
@@ -317,26 +366,58 @@
     </div>
   </section>
 
-  <!-- COLLAB BREAK (full image) -->
-  <section class="fullbleed panel" data-parallax="0.06" aria-label="Collaboration loop">
-    <div class="panel-media">
-      <img src="collaboration-loop.png" alt="Infinite loop of creation, evaluation and evolution" class="lightboxable">
-      <div class="overlay" aria-hidden="true"></div>
+  <!-- BREAK 3 -->
+  <section class="break fullbleed">
+    <div>
+      <div class="break-title reveal">A loop of creation. Evaluation. Evolution.</div>
+      <p class="break-sub muted reveal">GPT-10 helps build the next generation.</p>
     </div>
+  </section>
+
+  <!-- COLLAB IMAGE (full-bleed, optional video) -->
+  <section class="fullbleed panel" data-parallax="0.07" aria-label="Collaboration loop">
+    <div class="panel-media">
+  <video
+    src="collaboration-loop.mp4"
+    poster="collaboration-loop.png"
+    autoplay
+    muted
+    loop
+    playsinline
+  ></video>
+  <div class="overlay" aria-hidden="true"></div>
+</div>
+
     <div class="content">
       <div class="bubble">
-        <h3 class="panel-title">GPT-10 helps build the next generation</h3>
-        <p class="panel-sub">Self-improving research agents discover architectures, datasets, and safety checks that inform future GPT models.</p>
+        <h3 class="panel-title">Self-improving research agents</h3>
+        <p class="panel-sub">Architectures, datasets, and safety checks that inform future GPT models.</p>
       </div>
     </div>
   </section>
 
-  <!-- FULL-BLEED PANELS: APPLIED -->
-  <section class="fullbleed panel" id="applied" data-parallax="0.12">
-    <div class="panel-media">
-      <img src="applied-business.png" alt="Premium meeting with holographic dashboards" class="lightboxable">
-      <div class="overlay" aria-hidden="true"></div>
+  <!-- BREAK 4 -->
+  <section class="break fullbleed">
+    <div>
+      <div class="break-title reveal">Applied intelligence, real-world impact.</div>
+      <p class="break-sub muted reveal">Business. Health. Learning. Home.</p>
     </div>
+  </section>
+
+  <!-- APPLIED PANELS -->
+  <section class="fullbleed panel" id="applied" data-parallax="0.12">
+   <div class="panel-media">
+  <video
+    src="applied-business.mp4"
+    poster="applied-business.png"
+    autoplay
+    muted
+    loop
+    playsinline
+  ></video>
+  <div class="overlay" aria-hidden="true"></div>
+</div>
+
     <div class="content">
       <div class="bubble">
         <h3 class="panel-title">Business Assistant</h3>
@@ -345,11 +426,19 @@
     </div>
   </section>
 
-  <section class="fullbleed panel right" data-parallax="0.1">
-    <div class="panel-media">
-      <img src="applied-doctor.png" alt="Holographic medical assistant analyzing scans in 3D" class="lightboxable">
-      <div class="overlay" aria-hidden="true"></div>
-    </div>
+  <section class="fullbleed panel right" data-parallax="0.10">
+   <div class="panel-media">
+  <video
+    src="applied-doctor.mp4"
+    poster="applied-doctor.png"
+    autoplay
+    muted
+    loop
+    playsinline
+  ></video>
+  <div class="overlay" aria-hidden="true"></div>
+</div>
+
     <div class="content">
       <div class="bubble">
         <h3 class="panel-title">Doctor AI</h3>
@@ -358,11 +447,19 @@
     </div>
   </section>
 
-  <section class="fullbleed panel" data-parallax="0.08">
-    <div class="panel-media">
-      <img src="applied-teacher.png" alt="Adaptive AI teacher with holographic lesson" class="lightboxable">
-      <div class="overlay" aria-hidden="true"></div>
-    </div>
+  <section class="fullbleed panel" data-parallax="0.09">
+   <div class="panel-media">
+  <video
+    src="applied-teacher.mp4"
+    poster="applied-teacher.png"
+    autoplay
+    muted
+    loop
+    playsinline
+  ></video>
+  <div class="overlay" aria-hidden="true"></div>
+</div>
+
     <div class="content">
       <div class="bubble">
         <h3 class="panel-title">Personal Teacher</h3>
@@ -371,11 +468,19 @@
     </div>
   </section>
 
-  <section class="fullbleed panel right" data-parallax="0.08">
+  <section class="fullbleed panel right" data-parallax="0.09">
     <div class="panel-media">
-      <img src="applied-majordome.png" alt="Smart living room managed by a holographic assistant" class="lightboxable">
-      <div class="overlay" aria-hidden="true"></div>
-    </div>
+  <video
+    src="applied-majordome.mp4"
+    poster="applied-majordome.png"
+    autoplay
+    muted
+    loop
+    playsinline
+  ></video>
+  <div class="overlay" aria-hidden="true"></div>
+</div>
+
     <div class="content">
       <div class="bubble">
         <h3 class="panel-title">Everyday Majordome</h3>
@@ -390,8 +495,8 @@
       <div class="reveal">
         <h2>ChatGPT Composer — Premium Redesign</h2>
         <p class="lead">A calmer, focused writing space with smart tools within reach.</p>
-        <div class="card tilt" style="margin-top:14px">
-          <div class="eyebrow">Live Mock</div>
+        <div class="card" style="margin-top:14px">
+          <div class="eyebrow" style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Live Mock</div>
           <div style="border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--bg-soft)">
             <div style="padding:14px;border-bottom:1px solid var(--line);display:flex;gap:8px;align-items:center">
               <input type="text" placeholder="Ask anything…" style="flex:1;border:none;background:transparent;outline:none;color:var(--text);font-size:16px" />
@@ -408,8 +513,7 @@
           </div>
         </div>
       </div>
-      <div class="reveal tilt">
-        <!-- chat-ui.png -->
+      <div class="reveal">
         <div class="macbook">
           <div class="screen">
             <img src="chat-ui.png" alt="Redesigned ChatGPT composer" style="width:100%;height:100%;object-fit:cover" class="lightboxable">
@@ -419,8 +523,8 @@
     </div>
   </section>
 
-  <!-- CTA -->
-  <section class="section" id="contact">
+  <!-- CTA (100vh) -->
+  <section class="fullbleed" id="contact" style="min-height:100vh;display:grid;place-items:center;border-top:1px solid var(--line)">
     <div class="container">
       <div class="card" style="border-radius:28px;background:
         radial-gradient(1200px 400px at 100% 0%, color-mix(in oklab, var(--accent) 24%, transparent) 0%, transparent 60%), var(--card)">
@@ -436,7 +540,7 @@
             </div>
           </div>
           <form class="card" onsubmit="event.preventDefault(); alert('Thanks! We will be in touch.');">
-            <div class="eyebrow">Request access</div>
+            <div class="eyebrow" style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Request access</div>
             <label class="muted" for="email">Email</label>
             <input id="email" type="email" required placeholder="you@company.com" style="width:100%;margin:8px 0 14px;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg-soft);color:var(--text)" />
             <label class="muted" for="use">Primary use</label>
@@ -506,23 +610,6 @@
   };
   document.addEventListener('scroll', onScroll, {passive:true}); onScroll();
 
-  // Parallax for fullbleed panels
-  const panels = document.querySelectorAll('.panel');
-  const parallax = ()=>{
-    const wh = window.innerHeight;
-    panels.forEach(p=>{
-      const rate = parseFloat(p.getAttribute('data-parallax')||'0.08');
-      const rect = p.getBoundingClientRect();
-      const mid = rect.top + rect.height/2 - wh/2;
-      const translate = Math.max(Math.min(mid * -rate, 60), -60);
-      const img = p.querySelector('.panel-media img');
-      if(img) img.style.transform = `translateY(${translate}px) scale(1.05)`;
-    });
-  };
-  document.addEventListener('scroll', parallax, {passive:true});
-  window.addEventListener('resize', parallax);
-  parallax();
-
   // Active nav highlight
   const ids = ['about','create','code','applied','chatui','contact'];
   const navMap = {}; document.querySelectorAll('.nav-links a').forEach(a=>navMap[a.getAttribute('href').slice(1)]=a);
@@ -539,7 +626,26 @@
   }, {rootMargin:'-45% 0px -45% 0px', threshold:0});
   ids.forEach(id=>{ const el=document.getElementById(id); if(el) spy.observe(el); });
 
-  // Lightbox (click any .lightboxable)
+  // Parallax for fullbleed panels
+  const panels = document.querySelectorAll('.panel');
+  const parallax = ()=>{
+    const wh = window.innerHeight;
+    panels.forEach(p=>{
+      const rate = parseFloat(p.getAttribute('data-parallax')||'0.08');
+      const rect = p.getBoundingClientRect();
+      const mid = rect.top + rect.height/2 - wh/2;
+      const translate = Math.max(Math.min(mid * -rate, 60), -60);
+      const img = p.querySelector('img');
+      if(img) img.style.transform = `translateY(${translate}px) scale(1.05)`;
+      const vid = p.querySelector('video');
+      if(vid) vid.style.transform = `translateY(${translate}px) scale(1.05)`;
+    });
+  };
+  document.addEventListener('scroll', parallax, {passive:true});
+  window.addEventListener('resize', parallax);
+  parallax();
+
+  // Lightbox
   const lb = document.createElement('div'); lb.className='lightbox'; lb.innerHTML = '<img alt="">';
   document.body.appendChild(lb);
   const lbImg = lb.querySelector('img');
@@ -563,7 +669,25 @@
     });
   });
 
-  // Subtle hero parallax for media
+  // Media loader: prefer video, fallback to image if not loaded
+  (function(){
+    document.querySelectorAll('.media-block').forEach(block=>{
+      const video = block.querySelector('video');
+      const img = block.querySelector('img');
+      if(!video){ if(img) img.style.opacity = 1; return; }
+      let handled = false;
+      if(img) img.style.opacity = 0;
+      video.style.opacity = 0;
+      const showImg = ()=>{ if(handled) return; handled = true; if(img){ img.style.opacity = 1; } };
+      const showVideo = ()=>{ if(handled) return; handled = true; if(video){ video.style.opacity = 1; video.play().catch(()=>{}); } };
+      video.addEventListener('loadeddata', showVideo);
+      video.addEventListener('error', showImg);
+      // fallback: if video doesn't start, show image after 1.5s
+      setTimeout(()=>{ if(!handled) showImg(); }, 1500);
+    });
+  })();
+
+  // Subtle hero parallax
   (function(){
     const media = document.querySelector('.hero-media');
     if(!media) return;
