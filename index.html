@@ -16,6 +16,9 @@
     --shadow:0 12px 40px rgba(10,14,25,.10);
     --glass:color-mix(in oklab, var(--bg) 85%, transparent);
     --overlay: linear-gradient(180deg, rgba(5,8,15,.0) 0%, rgba(5,8,15,.35) 55%, rgba(5,8,15,.6) 100%);
+    --violet: #8a7bff;         /* main accent */
+    --violet-2: #c1b8ff;       /* light accent */
+    --violet-dark: #5c4fff;    /* deeper tint */
   }
   @media (prefers-color-scheme: dark){
     :root{
@@ -147,9 +150,9 @@
   @media (prefers-reduced-motion: reduce){
     *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
   }
-  /* Quick debug: ensure panel images are visible */
-  .panel .panel-media img { opacity: 1 !important; visibility: visible !important; }
+
 </style>
+<link rel="stylesheet" href="style.css?v=1">
 </head>
 <body>
 <div class="scrollbar" id="scrollbar"></div>
@@ -179,7 +182,7 @@
     <div class="grid cols-2">
       <div class="reveal">
         <span class="tag">The Universal Engine of Imagination</span>
-        <h1>One Intelligence. <br/>Infinite Creations.</h1>
+        <h1 class="title">One Intelligence.<br/>Infinite Creations.</h1>
         <p class="lead">Generate photoreal images, 15-minute films, music, code, automation, and printable 3D designs — all in one place.</p>
         <div style="height:16px"></div>
         <div style="display:flex;gap:12px;flex-wrap:wrap">
@@ -197,26 +200,85 @@
   </section>
 
   <!-- ABOUT -->
-  <section class="section" id="about">
-    <div class="container grid cols-2">
-      <div class="reveal">
-        <h2>What is GPT-10?</h2>
-        <p>GPT-10 is more than AI. It’s a universal creator, a trusted advisor, and an execution engine. It understands the world across text, images, video, audio, and 3D — and acts on it.</p>
-        <div style="height:10px"></div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <span class="tag">Multimodal</span><span class="tag">Reasoning</span><span class="tag">Memory</span><span class="tag">Agents</span><span class="tag">Trust</span>
-        </div>
+<section class="section" id="about">
+  <div class="container about-text">
+    <!-- AFTER -->
+<h2 class="about-title emphasis">What is GPT-10?</h2>
+<p class="about-lead glow">
+  A universal creator, a trusted advisor, and an execution engine. GPT-10 understands the world across text, images, video, audio, and 3D — and acts on it with precision and taste.
+</p>
+
+
+    <div class="about-pills">
+      <span class="pill">Multimodal</span>
+      <span class="pill">Advanced Reasoning</span>
+      <span class="pill">Long-term Memory</span>
+      <span class="pill">Autonomous Agents</span>
+      <span class="pill">Trust & Safety</span>
+    </div>
+
+    <div class="features">
+      <div class="feature">
+        <h3>Create across media</h3>
+        <ul class="bullets">
+          <li>Photoreal images with consistent brand styles.</li>
+          <li>15-minute films: script, shots, edit, grade, sound.</li>
+          <li>Original music with stems, tempo maps, structure.</li>
+          <li>3D models validated and ready to print.</li>
+        </ul>
       </div>
-      <div class="reveal">
-        <div class="macbook">
-          <div class="screen">
-            <!-- about image -->
-            <img src="about-concept.png" alt="Conceptual visualization of GPT-10" style="width:100%;height:100%;object-fit:cover" class="lightboxable">
-          </div>
-        </div>
+
+      <div class="feature">
+        <h3>Ship real products</h3>
+        <ul class="bullets">
+          <li>Mobile games: design → code → store submission.</li>
+          <li>Production websites with SEO, analytics, and tests.</li>
+          <li>Powerful automations across tools & APIs.</li>
+          <li>Agentic execution with human-in-the-loop.</li>
+        </ul>
+      </div>
+
+      <div class="feature">
+        <h3>Applied intelligence</h3>
+        <ul class="bullets">
+          <li>Business Assistant: GTM, pricing, funnels, reporting.</li>
+          <li>Doctor AI: triage with evidence links (assist, not replace).</li>
+          <li>Teacher: adaptive coaching and spaced repetition.</li>
+          <li>Majordome: calendar, travel, home automation, comms.</li>
+        </ul>
+      </div>
+
+      <div class="feature">
+        <h3>Evolves models</h3>
+        <ul class="bullets">
+          <li>Research agents explore architectures & datasets.</li>
+          <li>Continuous evaluation and safety improvements.</li>
+          <li>Closed-loop learning from real-world outcomes.</li>
+          <li>Insights informing the next generation of GPT.</li>
+        </ul>
       </div>
     </div>
-  </section>
+
+    <div class="about-stats">
+  <div class="stat">
+    <div class="num">4</div>
+    <div class="label">creation modes</div>
+  </div>
+  <div class="stat">
+    <div class="num">15&nbsp;min</div>
+    <div class="label">film generation</div>
+  </div>
+  <div class="stat">
+    <div class="num">E2E</div>
+    <div class="label">apps &amp; games</div>
+  </div>
+  <div class="stat">
+    <div class="num">3D</div>
+    <div class="label">print-ready</div>
+  </div>
+</div>
+
+</section>
 
   <!-- BREAK 1 -->
   <section class="break fullbleed">
@@ -319,52 +381,106 @@
   </section>
 
   <!-- CODE -->
-  <section class="section" id="code">
-    <div class="container">
-      <h2 class="reveal">Code. Ship. Scale.</h2>
-      <p class="lead reveal">Mobile games, world-class websites, and automations that execute your vision at scale.</p>
-      <div class="grid cols-3" style="margin-top:18px">
-        <article class="reveal">
-          <div class="iphone">
-            <div class="screen">
-              <img src="code-games.png" alt="Holographic creation of a mobile game" style="width:100%;height:100%;object-fit:cover" class="lightboxable">
-            </div>
-          </div>
-          <div class="divider"></div>
-          <h3>Mobile Games — end-to-end</h3>
-          <p class="muted">Design, code, assets, tests, store listing, App Store submission — automated.</p>
-        </article>
+<section class="section" id="code">
+  <div class="container">
+    <div class="code-header">
+      <h2>Code. Ship. Scale.</h2>
+      <p class="lead">From prototype to production: mobile games, world-class websites, and automations that run your business.</p>
+    </div>
 
-        <article class="reveal">
-          <div class="macbook">
-            <div class="screen">
-              <img src="code-web.png" alt="Premium holographic UI showing websites generating" style="width:100%;height:100%;object-fit:cover" class="lightboxable">
-            </div>
+    <!-- Row 1 — Games -->
+    <div class="code-row">
+      <div class="code-media">
+        <div class="iphone">
+          <div class="screen">
+            <img src="code-games.png" alt="Holographic creation of a mobile game" class="lightboxable">
           </div>
-          <div class="divider"></div>
-          <h3>Web Experiences</h3>
-          <p class="muted">Responsive, accessible, blazing fast — SSR, analytics, SEO, A/B testing baked in.</p>
-        </article>
+        </div>
+      </div>
+      <div class="code-copy">
+        <div class="eyebrow">Mobile Games — end-to-end</div>
+        <h3 class="code-title">Design, build, test, and ship to the store.</h3>
+        <ul class="code-bullets">
+          <li>Game loop, levels, assets, UI, IAP and analytics wiring.</li>
+          <li>CI builds for iOS/Android + store listings & screenshots.</li>
+          <li>Auto-generated unit tests and crash reporting hooks.</li>
+        </ul>
+        <div class="code-tags">
+          <span class="tag">Unity/Unreal</span>
+          <span class="tag">Pixel + 3D</span>
+          <span class="tag">App Store connect</span>
+        </div>
+        <div class="code-stats">
+          <div class="stat"><div class="num">48h</div><div class="label">MVP build</div></div>
+          <div class="stat"><div class="num">E2E</div><div class="label">store ready</div></div>
+          <div class="stat"><div class="num">Live</div><div class="label">telemetry</div></div>
+        </div>
+      </div>
+    </div>
 
-        <article class="reveal">
-          <div class="card">
-            <div class="icon" aria-hidden="true">⚙️</div>
-            <h3>Automation</h3>
-            <p>From lead intake to fulfillment — orchestrate tools, APIs, and human approvals.</p>
-            <div class="divider"></div>
-            <pre>on:new_lead
+    <!-- Row 2 — Web -->
+    <div class="code-row reverse">
+      <div class="code-copy">
+        <div class="eyebrow">Web Experiences</div>
+        <h3 class="code-title">Production-grade sites and apps — fast by default.</h3>
+        <ul class="code-bullets">
+          <li>SSR/ISR, accessibility, i18n, and analytics baked in.</li>
+          <li>Design system + tokens for instant theme & brand.</li>
+          <li>SEO, sitemaps, A/B testing, and lighthouse 95+.</li>
+        </ul>
+        <div class="code-tags">
+          <span class="tag">Next.js</span><span class="tag">Tailwind</span><span class="tag">shadcn/ui</span>
+          <span class="tag">Vercel</span>
+        </div>
+        <div class="code-stats">
+          <div class="stat"><div class="num">95+</div><div class="label">lighthouse</div></div>
+          <div class="stat"><div class="num">CDN</div><div class="label">edge SSR</div></div>
+          <div class="stat"><div class="num">Zero</div><div class="label">layout shift</div></div>
+        </div>
+      </div>
+      <div class="code-media">
+        <div class="macbook">
+          <div class="screen">
+            <img src="code-web.png" alt="Premium holographic UI showing websites generating" class="lightboxable">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 3 — Automation -->
+    <div class="code-row">
+      <div class="code-media">
+        <div class="card code-automation-card">
+          <pre class="code-snippet">on:new_lead
   - validate: email, company
   - enrich: clearbit
   - branch:
-      match ICP: create_opportunity & notify_sales
+      match ICP: create_opportunity &amp; notify_sales
       else: nurture_campaign</pre>
-          </div>
-          <div class="divider"></div>
-          <img src="code-automation.png" alt="Glowing network of nodes representing automation" style="width:100%;border-radius:16px;border:1px solid var(--line)" class="lightboxable">
-        </article>
+        </div>
+        <img src="code-automation.png" alt="Glowing automation graph" class="lightboxable code-automation-img">
+      </div>
+      <div class="code-copy">
+        <div class="eyebrow">Automation</div>
+        <h3 class="code-title">Orchestrate tools, APIs, and human approvals.</h3>
+        <ul class="code-bullets">
+          <li>CRM, billing, email, data warehouse — wired securely.</li>
+          <li>Human-in-the-loop checkpoints with audit trails.</li>
+          <li>Schedules, event triggers, retries, and dashboards.</li>
+        </ul>
+        <div class="code-tags">
+          <span class="tag">Zapier/Make</span><span class="tag">Airflow</span><span class="tag">Webhook</span><span class="tag">Postgres</span>
+        </div>
+        <div class="code-stats">
+          <div class="stat"><div class="num">x10</div><div class="label">ops throughput</div></div>
+          <div class="stat"><div class="num">99.9%</div><div class="label">uptime SLO</div></div>
+          <div class="stat"><div class="num">SOC2</div><div class="label">ready</div></div>
+        </div>
       </div>
     </div>
-  </section>
+
+  </div>
+</section>
 
   <!-- BREAK 3 -->
   <section class="break fullbleed">
